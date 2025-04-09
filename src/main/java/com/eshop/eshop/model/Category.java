@@ -16,13 +16,13 @@ import java.util.List;
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
-    private String Name;
+    private Long id;
+    private String name;
 
     @OneToMany(mappedBy = "category")
-    private List<Product> Products;
+    private List<Product> products;
 
-    public Category(String name) {
-        Name = name;
+    public Category(String nam) {
+        name = nam;
     }
 }

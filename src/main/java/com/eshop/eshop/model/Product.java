@@ -22,7 +22,7 @@ public class Product {
     private BigDecimal price;
     private int inventory;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "category_id")
     private Category category;
 

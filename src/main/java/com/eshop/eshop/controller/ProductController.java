@@ -88,10 +88,10 @@ public class ProductController {
 
     }
 
-    @GetMapping("/by/{category}/{brand}")
-    public ResponseEntity<ApiResponse> getProductsByCategoryAndBrand(@PathVariable String category, @PathVariable String brand){
+    @GetMapping("/by/{name}/products")
+    public ResponseEntity<ApiResponse> getProductsByCategoryAndBrand(@PathVariable String name){
         try {
-            List<Product> products = productService.getProductsByCategoryAndBrand(category, brand);
+            List<Product> products = productService.getProductsByName(name);
             if (products.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse("No products found", null));
             }
@@ -101,4 +101,31 @@ public class ProductController {
         }
 
     }
+    @GetMapping("/by-brand/{brandName}")
+    public ResponseEntity<ApiResponse> getProductsByBrand(@PathVariable String brandName){
+        try {
+            List<Product> products = productService.getProductsByBrand(brandName);
+            if (products.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse("No products found", null));
+            }
+            return ResponseEntity.ok(new ApiResponse("success", products));
+        }catch(Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
+        }
+    }
+
+    @GetMapping("/by-category/{brandName}")
+    public ResponseEntity<ApiResponse> getProductsByCategory(@PathVariable String brandName){
+        try {
+            List<Product> products = productService.getProductsByCategory(brandName);
+            if (products.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse("No products found", null));
+            }
+            return ResponseEntity.ok(new ApiResponse("success", products));
+        }catch(Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
+        }
+    }
+
+
 }
