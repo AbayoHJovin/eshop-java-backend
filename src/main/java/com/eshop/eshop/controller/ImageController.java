@@ -7,12 +7,14 @@ import com.eshop.eshop.exceptions.ResourceNotFoundException;
 import com.eshop.eshop.model.Image;
 import com.eshop.eshop.service.image.IImageService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,6 +26,7 @@ import java.util.List;
 @RestController
 @RequestMapping("${api.prefix}/images")
 public class ImageController {
+    @Autowired
     private final IImageService imageService;
 
     @PostMapping("/upload")
@@ -36,12 +39,13 @@ public class ImageController {
         }
 
     }
+    @Transactional(readOnly = true)
     @GetMapping("/image/download/{imageId}")
     public ResponseEntity<Resource> downloadImage(@PathVariable Long imageId) throws SQLException {
         Image image = imageService.getImageById(imageId);
-        ByteArrayResource resource = new ByteArrayResource(image.getImage().getBytes(1,(int) image.getImage().length()));
-        return ResponseEntity.ok().contentType(MediaType.parseMediaType(image.getFileType()))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachement; filename=\"" + image.getFileName()+"\"")
+        ByteArrayResource resource = new ByteArrayResource(image.getImage().getBytes(1, (int) image.getImage().length()));
+        return  ResponseEntity.ok().contentType(MediaType.parseMediaType(image.getFileType()))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" +image.getFileName() + "\"")
                 .body(resource);
     }
 
